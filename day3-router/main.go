@@ -21,5 +21,5 @@ func main() {
 	r.GET("/assets/*filepath", func(c *gee.Context) {
 		c.JSON(http.StatusOK, gee.H{"filename": c.Param("filepath")})
 	})
-	r.Run("9999")
+	r.Run(":9999")
 }

@@ -1,6 +1,7 @@
 package gee
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -11,6 +12,9 @@ type node struct {
 	isWild   bool
 }
 
+func (n *node) String() string {
+	return fmt.Sprintf("node{pattern=%s,part=%s,isWild=%s}", n.pattern, n.part, n.isWild)
+}
 func (n *node) matchChild(part string) *node {
 	for _, child := range n.children {
 		if child.part == part || child.isWild {
@@ -43,6 +47,14 @@ func (n *node) insert(pattern string, parts []string, height int) {
 		n.children = append(n.children, child)
 	}
 	child.insert(pattern, parts, height+1)
+}
+func (n *node) travel(list *([]*node)) {
+	if n.pattern != "" {
+		*list = append(*list, n)
+	}
+	for _, child := range n.children {
+		child.travel(list)
+	}
 }
 
 func (n *node) search(parts []string, height int) *node {
